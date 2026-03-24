@@ -487,6 +487,111 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    /* ── Edit banner ── */
+    .edit-banner {
+      background: var(--accent-pale);
+      border-left: 3px solid var(--accent);
+      padding: 0.6rem 1rem;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .edit-banner.visible { display: block; }
+
+    /* ── Media upload area ── */
+    .upload-area {
+      border: 1.5px dashed var(--rule);
+      padding: 1.8rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .upload-area:hover { border-color: var(--accent); background: var(--accent-pale); }
+    .upload-area input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-area-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .upload-area-label { font-size: 0.78rem; color: var(--ink-light); line-height: 1.7; }
+    .upload-area-sub { font-size: 0.68rem; color: var(--ink-faint); margin-top: 0.3rem; }
+
+    /* ── Preview grid (in form) ── */
+    .media-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    .media-preview-item {
+      position: relative; border-radius: 2px; overflow: hidden; aspect-ratio: 1; background: var(--rule);
+    }
+    .media-preview-item img,
+    .media-preview-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .media-remove-btn {
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(30,28,24,0.75); color: white;
+      border: none; width: 22px; height: 22px; border-radius: 50%;
+      font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .media-type-badge {
+      position: absolute; bottom: 4px; left: 4px;
+      background: rgba(30,28,24,0.6); color: white;
+      font-size: 0.55rem; padding: 2px 5px; border-radius: 2px; letter-spacing: 0.05em;
+    }
+
+    /* ── Entry list thumbnail ── */
+    .entry-thumb-wrap {
+      width: 70px; height: 70px; border-radius: 2px; overflow: hidden; flex-shrink: 0;
+    }
+    .entry-thumb-wrap img,
+    .entry-thumb-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .entry-media-icon { font-size: 0.65rem; color: var(--ink-faint); margin-top: 0.3rem; }
+
+    /* ── Detail media ── */
+    .detail-media-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+    .detail-media-label {
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-light); margin-bottom: 1rem;
+    }
+    .detail-media-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem;
+    }
+    .detail-media-item {
+      border-radius: 2px; overflow: hidden; aspect-ratio: 1; cursor: pointer; position: relative;
+    }
+    .detail-media-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s; }
+    .detail-media-item img:hover { opacity: 0.88; }
+    .detail-media-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .detail-video-badge {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(30,28,24,0.25); font-size: 1.5rem; pointer-events: none;
+    }
+
+    /* ── Edit button ── */
+    .btn-edit {
+      background: var(--accent); color: var(--paper); border: none;
+      padding: 0.65rem 1.4rem; font-family: 'Noto Serif JP', serif;
+      font-size: 0.78rem; letter-spacing: 0.12em; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-edit:hover { opacity: 0.85; }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed; inset: 0; background: rgba(15,13,10,0.94);
+      z-index: 800; display: flex; align-items: center; justify-content: center;
+      padding: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox img, .lightbox video { max-width: 100%; max-height: 88vh; border-radius: 2px; display: block; }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: none; border: none; color: white; font-size: 1.5rem;
+      cursor: pointer; opacity: 0.6; transition: opacity 0.2s;
+    }
+    .lightbox-close:hover { opacity: 1; }
+
     /* ── Responsive ── */
     @media (max-width: 600px) {
       header { padding: 1rem; }
@@ -495,6 +600,7 @@
       .entry-card { grid-template-columns: 54px 1fr; }
       .entry-tag { display: none; }
       .date-row { grid-template-columns: 1fr; }
+      .detail-media-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
     }
   </style>
 </head>
@@ -513,7 +619,7 @@
   <!-- Tab bar -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('list')">日記一覧</button>
-    <button class="tab-btn" onclick="switchTab('new')">新しい日記を書く</button>
+    <button class="tab-btn" id="formTabBtn" onclick="switchTab('new')">新しい日記を書く</button>
   </div>
 
   <!-- Main -->
@@ -534,8 +640,10 @@
       <div class="entries" id="entriesList"></div>
     </div>
 
-    <!-- ── New Entry View ── -->
+    <!-- ── New / Edit Entry View ── -->
     <div class="view" id="view-new">
+      <div class="edit-banner" id="editBanner">✎ 編集モード — 変更を加えて「保存する」を押してください</div>
+
       <div class="form-section">
         <label class="form-label">タイトル</label>
         <input type="text" class="form-input" id="newTitle" placeholder="今日のひとことタイトル…">
@@ -577,9 +685,20 @@
         </div>
       </div>
 
+      <div class="form-section">
+        <label class="form-label">写真・動画</label>
+        <div class="upload-area">
+          <input type="file" id="mediaInput" accept="image/*,video/*" multiple onchange="handleMediaUpload(event)">
+          <div class="upload-area-icon">📎</div>
+          <div class="upload-area-label">クリックまたはドラッグ＆ドロップで追加</div>
+          <div class="upload-area-sub">画像（JPG・PNG・GIF・WEBP）/ 動画（MP4・MOV・WEBM）</div>
+        </div>
+        <div class="media-preview-grid" id="mediaPreviewGrid"></div>
+      </div>
+
       <div>
         <button class="btn-submit" onclick="saveEntry()">保存する</button>
-        <button class="btn-cancel" onclick="switchTab('list')">キャンセル</button>
+        <button class="btn-cancel" onclick="cancelForm()">キャンセル</button>
       </div>
     </div>
 
@@ -593,12 +712,26 @@
         <span style="font-size:0.72rem;color:var(--ink-faint)" id="detailCategory"></span>
       </div>
       <div class="detail-body" id="detailBody"></div>
+
+      <!-- メディア表示エリア -->
+      <div class="detail-media-section" id="detailMediaSection" style="display:none">
+        <div class="detail-media-label">写真・動画</div>
+        <div class="detail-media-grid" id="detailMediaGrid"></div>
+      </div>
+
       <div class="detail-actions">
+        <button class="btn-edit" onclick="startEdit()">✎ 編集する</button>
         <button class="btn-delete" onclick="deleteEntry()">この日記を削除</button>
       </div>
     </div>
 
   </main>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div id="lightboxContent"></div>
 </div>
 
 <!-- Toast -->
@@ -609,6 +742,8 @@
   let entries = JSON.parse(localStorage.getItem('diary_entries') || '[]');
   let currentId = null;
   let activeMood = '';
+  let pendingMedia = []; // { dataUrl, type, name }
+  let isEditMode = false;
 
   // ── Sample data (only on first load) ──
   if (entries.length === 0) {
@@ -619,7 +754,8 @@
         title: '春の訪れを感じた日',
         body: '朝、窓を開けると少し暖かい風が入ってきた。桜の木がもうすぐ咲きそうで、なんだか気持ちが明るくなった。近所のカフェでコーヒーを飲みながら、本を一冊読んだ。のんびりとした一日。',
         mood: '😊 うれしい',
-        category: '日常'
+        category: '日常',
+        media: []
       },
       {
         id: 2,
@@ -627,7 +763,8 @@
         title: '雨の月曜日',
         body: '朝から雨。傘を持っていくのを忘れて、少し濡れてしまった。仕事は山積みだったけど、なんとか片付けた。帰りにスーパーで鍋の材料を買って、家でひとり鍋をした。あたたまった。',
         mood: '😌 おだやか',
-        category: '日常'
+        category: '日常',
+        media: []
       },
       {
         id: 3,
@@ -635,7 +772,8 @@
         title: '高知城に散歩',
         body: '久しぶりに高知城のあたりを散歩した。石段を登ると街が一望できて、なんだか頭がすっきりした。途中でひろめ市場に寄って、かつおのたたきを食べた。やっぱりおいしい。',
         mood: '😊 うれしい',
-        category: '旅行'
+        category: '旅行',
+        media: []
       },
       {
         id: 4,
@@ -643,7 +781,8 @@
         title: '読み終えた本のこと',
         body: '先月から読んでいた小説をようやく読み終えた。最後の章は電車の中で読んでいたのに、思わず目が潤んでしまって、少し恥ずかしかった。物語の余韻をしばらく感じていたい。',
         mood: '🤔 考え中',
-        category: '読書'
+        category: '読書',
+        media: []
       }
     ];
     saveToStorage();
@@ -666,12 +805,22 @@
 
     const tabMap = { list: 0, new: 1, detail: -1 };
     const idx = tabMap[tab];
-    if (idx >= 0) {
-      document.querySelectorAll('.tab-btn')[idx].classList.add('active');
-    }
+    if (idx >= 0) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
 
     if (tab === 'list') renderList(entries);
-    if (tab === 'new') resetForm();
+    if (tab === 'new' && !isEditMode) resetForm();
+  }
+
+  function cancelForm() {
+    if (isEditMode) {
+      isEditMode = false;
+      document.getElementById('editBanner').classList.remove('visible');
+      document.getElementById('formTabBtn').textContent = '新しい日記を書く';
+      resetForm();
+      openEntry(currentId);
+    } else {
+      switchTab('list');
+    }
   }
 
   // ── Render list ──
@@ -693,15 +842,29 @@
       const d = new Date(e.date + 'T00:00:00');
       const day = d.getDate();
       const my = d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'short' });
+      const media = e.media || [];
+      const firstImg = media.find(m => m.type === 'image');
+      const firstVid = media.find(m => m.type === 'video');
+
+      let leftCol = '';
+      if (firstImg) {
+        leftCol = `<div class="entry-thumb-wrap"><img src="${firstImg.dataUrl}" alt=""></div>`;
+      } else if (firstVid) {
+        leftCol = `<div class="entry-thumb-wrap"><video src="${firstVid.dataUrl}" muted></video></div>`;
+      } else {
+        leftCol = `<div class="entry-date-block"><span class="entry-date-day">${day}</span><div class="entry-date-my">${my}</div></div>`;
+      }
+
+      const mediaNote = media.length > 0
+        ? `<div class="entry-media-icon">📷 ${media.length}件</div>` : '';
+
       return `
         <div class="entry-card" onclick="openEntry(${e.id})">
-          <div class="entry-date-block">
-            <span class="entry-date-day">${day}</span>
-            <div class="entry-date-my">${my}</div>
-          </div>
+          ${leftCol}
           <div class="entry-body">
             <div class="entry-title">${escHtml(e.title)}</div>
             <div class="entry-excerpt">${escHtml(e.body)}</div>
+            ${mediaNote}
           </div>
           <div class="entry-tag">${escHtml(e.category)}</div>
         </div>`;
@@ -731,9 +894,61 @@
     document.getElementById('detailCategory').textContent = e.category;
     document.getElementById('detailBody').textContent = e.body;
 
+    // Media
+    const media = e.media || [];
+    const mediaSection = document.getElementById('detailMediaSection');
+    const mediaGrid = document.getElementById('detailMediaGrid');
+    if (media.length > 0) {
+      mediaSection.style.display = 'block';
+      mediaGrid.innerHTML = media.map(m => {
+        if (m.type === 'image') {
+          return `<div class="detail-media-item" onclick="openLightbox('image','${m.dataUrl}')">
+            <img src="${m.dataUrl}" alt="">
+          </div>`;
+        } else {
+          return `<div class="detail-media-item" onclick="openLightbox('video','${m.dataUrl}')">
+            <video src="${m.dataUrl}" muted></video>
+            <div class="detail-video-badge">▶</div>
+          </div>`;
+        }
+      }).join('');
+    } else {
+      mediaSection.style.display = 'none';
+      mediaGrid.innerHTML = '';
+    }
+
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('view-detail').classList.add('active');
+  }
+
+  // ── Start edit ──
+  function startEdit() {
+    const e = entries.find(x => x.id === currentId);
+    if (!e) return;
+    isEditMode = true;
+
+    document.getElementById('newTitle').value = e.title;
+    document.getElementById('newDate').value = e.date;
+    document.getElementById('newCategory').value = e.category;
+    document.getElementById('newBody').value = e.body;
+
+    activeMood = e.mood;
+    document.querySelectorAll('.mood-btn').forEach(b =>
+      b.classList.toggle('selected', b.textContent.trim() === e.mood)
+    );
+
+    pendingMedia = [...(e.media || [])];
+    renderMediaPreview();
+
+    document.getElementById('editBanner').classList.add('visible');
+    document.getElementById('formTabBtn').textContent = '編集中';
+
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('view-new').classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // ── Delete ──
@@ -745,7 +960,41 @@
     switchTab('list');
   }
 
-  // ── Save new entry ──
+  // ── Media upload ──
+  function handleMediaUpload(event) {
+    const files = Array.from(event.target.files);
+    if (!files.length) return;
+    let done = 0;
+    files.forEach(file => {
+      const isImage = file.type.startsWith('image/');
+      const isVideo = file.type.startsWith('video/');
+      if (!isImage && !isVideo) { done++; return; }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        pendingMedia.push({ dataUrl: ev.target.result, type: isImage ? 'image' : 'video', name: file.name });
+        if (++done === files.length) renderMediaPreview();
+      };
+      reader.readAsDataURL(file);
+    });
+    event.target.value = '';
+  }
+
+  function renderMediaPreview() {
+    const grid = document.getElementById('mediaPreviewGrid');
+    if (pendingMedia.length === 0) { grid.innerHTML = ''; return; }
+    grid.innerHTML = pendingMedia.map((m, i) => `
+      <div class="media-preview-item">
+        ${m.type === 'image'
+          ? `<img src="${m.dataUrl}" alt="">`
+          : `<video src="${m.dataUrl}" muted></video>`}
+        <div class="media-type-badge">${m.type === 'image' ? '📷' : '🎬'}</div>
+        <button class="media-remove-btn" onclick="removeMedia(${i})">✕</button>
+      </div>`).join('');
+  }
+
+  function removeMedia(i) { pendingMedia.splice(i, 1); renderMediaPreview(); }
+
+  // ── Save entry (new or edit) ──
   function saveEntry() {
     const title = document.getElementById('newTitle').value.trim();
     const date  = document.getElementById('newDate').value;
@@ -755,19 +1004,38 @@
     if (!title) { shake(document.getElementById('newTitle')); return; }
     if (!body)  { shake(document.getElementById('newBody'));  return; }
 
-    const newEntry = {
-      id: Date.now(),
-      date: date || new Date().toISOString().slice(0, 10),
-      title,
-      body,
-      mood: activeMood || '—',
-      category: cat
-    };
-
-    entries.unshift(newEntry);
-    saveToStorage();
-    showToast('日記を保存しました ✦');
-    switchTab('list');
+    if (isEditMode) {
+      const e = entries.find(x => x.id === currentId);
+      if (e) {
+        e.title = title;
+        e.date = date || e.date;
+        e.body = body;
+        e.category = cat;
+        e.mood = activeMood || e.mood;
+        e.media = [...pendingMedia];
+      }
+      saveToStorage();
+      showToast('日記を更新しました ✦');
+      isEditMode = false;
+      document.getElementById('editBanner').classList.remove('visible');
+      document.getElementById('formTabBtn').textContent = '新しい日記を書く';
+      resetForm();
+      openEntry(currentId);
+    } else {
+      const newEntry = {
+        id: Date.now(),
+        date: date || new Date().toISOString().slice(0, 10),
+        title, body,
+        mood: activeMood || '—',
+        category: cat,
+        media: [...pendingMedia]
+      };
+      entries.unshift(newEntry);
+      saveToStorage();
+      showToast('日記を保存しました ✦');
+      resetForm();
+      switchTab('list');
+    }
   }
 
   // ── Mood select ──
@@ -785,11 +1053,37 @@
     document.getElementById('newCategory').value = '日常';
     document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
     activeMood = '';
+    pendingMedia = [];
+    document.getElementById('mediaPreviewGrid').innerHTML = '';
   }
+
+  // ── Lightbox ──
+  function openLightbox(type, src) {
+    const content = document.getElementById('lightboxContent');
+    content.innerHTML = type === 'image'
+      ? `<img src="${src}" alt="">`
+      : `<video src="${src}" controls autoplay style="max-width:100%;max-height:88vh;"></video>`;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightboxContent').innerHTML = '';
+  }
+
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
   // ── Storage ──
   function saveToStorage() {
-    localStorage.setItem('diary_entries', JSON.stringify(entries));
+    try {
+      localStorage.setItem('diary_entries', JSON.stringify(entries));
+    } catch(e) {
+      showToast('⚠ 容量不足。画像・動画を減らしてください。');
+    }
   }
 
   // ── Toast ──
